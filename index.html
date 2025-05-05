@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <style>
+        body {padding: 20px;}
+        .card {max-width: 450px;
+        margin: 15px auto;}
+    </style>
+</head>
+<body>
+
+    <div class = "container">
+
+        <div class = "card">
+            <div class = "card-body">
+
+                <h3 class="text-center">Register Users</h3>
+
+                <form id="regForm">
+
+                    <div class="mb-3">
+                        <label for ="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for ="email">email</label>
+                        <input type="text" class="form-control" id="email" name="email" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for ="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+
+                </form>
+
+                <div id="feedback" class="mt-3" ></div>
+
+            </div>
+        </div>
+
+        <div class= "card">
+            <div class= "card-body">
+                <h3 class="text-centered">Registered Users</h3>
+
+                <ul id="userList" class="list-group"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        $(function(){
+
+            const $form = $('#regForm');
+        const $feedback = $("#feedback");
+        const $userList = $("#userList");
+
+        function showUsers() {
+
+
+            const users = JSON.parse(localStorage.getItem('users') || "[]");
+
+            $userList.empty();
+
+            if (users.length == 0){
+                $userList.append('<li class="list-group-item">No users yet</li>');
+            }else{
+
+                users.forEach((user, i) => {
+
+                    $userList.append(
+
+                        `<li class="list-group-items">${i+1}.<strong>${user.username}</strong>(${(user.email)})</li>`
+                    );
+                });
+            }
+        }
+
+        showUsers();
+
+        $form.on("submit", function(e){
+            e.preventDefault();
+
+
+            const userData = {
+
+
+                username: $("#username").val(),
+                email: $("#email").val()
+            };
+
+
+            $feedback.html('<div class = "alert alert-info">Processing..</div>')
+
+            setTimeout(() => {
+
+
+                const users = JSON.parse(localStorage.getItem('users') || "[]");
+
+                users.push(userData);
+                localStorage.setItem("users", JSON.stringify(users));
+
+
+                $feedback.html('<div class="alert alert-success">Registration Successfull!</div>')
+
+                $form[0].reset()
+
+                showUsers();
+
+
+            }, 1000);
+        });
+
+
+        });
+
+
+
+    </script>
+
+</body>
+</html>
